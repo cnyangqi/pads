@@ -1,0 +1,119 @@
+/**
+ * Copyright 2011 iThinkGo, Inc. All rights reserved.
+ */
+package com.ithinkgo.pads.service.datadictionary;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.orm.Page;
+import org.springside.modules.orm.PropertyFilter;
+
+import com.ithinkgo.pads.common.SS3Tools;
+import com.ithinkgo.pads.dao.datadictionary.DataDictionaryTypeDao;
+import com.ithinkgo.pads.entity.datadictionary.DataDictionaryType;
+import com.ithinkgo.pads.entity.jeasyui.TreeNode;
+
+/**
+ * 数据字典类型表 管理
+ * 
+ * @author <a href= "mailto:qi.yang.cn@gmail.com"> qi.yang.cn@gmail.com </a>
+ */
+@Service
+@Transactional
+public class DataDictionaryTypeManager {
+
+	/** 日志对象 */
+	private static Logger logger = LoggerFactory.getLogger(DataDictionaryTypeManager.class);
+
+	/** dao对象 */
+	private DataDictionaryTypeDao dataDictionaryTypeDao;
+
+	/** 保存新增或修改的对象 */
+	public void saveDataDictionaryType(DataDictionaryType dataDictionaryType) {
+		dataDictionaryTypeDao.save(dataDictionaryType);
+	}
+
+	/** 按id删除对象 */
+	public void deleteDataDictionaryType(Long id) {
+		dataDictionaryTypeDao.delete(id);
+	}
+
+	/** 按ids批量删除对象 ids是多个id拼接的字符串，id之间分割符与前台约定为',' */
+	public void batchDeleteDataDictionaryType(String ids) {
+		Map<String, Long[]> map = new HashMap<String, Long[]>();
+		map.put("ids", SS3Tools.ids2LongArray(ids));
+		dataDictionaryTypeDao.batchExecute("delete DataDictionaryType t where t.id in (:ids)", map);// 命名参数
+	}
+
+	/** 按id获取对象 */
+	@Transactional(readOnly = true)
+	public DataDictionaryType queryDataDictionaryTypeById(Long id) {
+		return dataDictionaryTypeDao.get(id);
+	}
+
+	/** 获取全部对象 */
+	@Transactional(readOnly = true)
+	public List<DataDictionaryType> queryAllDataDictionaryType() {
+		return dataDictionaryTypeDao.getAll();
+	}
+
+	/** 按属性过滤条件列表分页查找对象 */
+	@Transactional(readOnly = true)
+	public Page<DataDictionaryType> queryDataDictionaryTypeByFilters(final Page<DataDictionaryType> page,
+			final List<PropertyFilter> filters) {
+		return dataDictionaryTypeDao.findPage(page, filters);
+	}
+
+	/** 判断对象的属性值在数据库内是否唯一 */
+	@Transactional(readOnly = true)
+	public boolean isDataDictionaryTypeUnique(String newDataDictionaryType, String oldDataDictionaryType) {
+		return dataDictionaryTypeDao.isPropertyUnique("name", newDataDictionaryType, oldDataDictionaryType);
+	}
+
+	/** 查询数据字典类型树根节点 */
+	@Transactional(readOnly = true)
+	public List<TreeNode> queryDataDictionaryTypeTreeRootNode() {
+		Iterator<DataDictionaryType> it = dataDictionaryTypeDao.queryDataDictionaryTypeTreeRootNode().iterator();
+		List<TreeNode> list = new LinkedList<TreeNode>();
+		while (it.hasNext()) {
+			DataDictionaryType tmp = it.next();
+			TreeNode node = new TreeNode();
+			node.setId(tmp.getId());
+			node.setText(tmp.getName());
+
+			// 当数据字典类型对象的子类型数大于0的时候，表示该类型节点还有子节点，状态为closed
+			Long subTypenum = tmp.getSubtypeNum();
+			if (subTypenum != null && subTypenum > 0) {
+				node.setState(TreeNode.CLOSED);
+			} else {
+				node.setState(TreeNode.OPEN);
+			}
+
+			// 设置树节点属性
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("parentId", String.valueOf(tmp.getParentId()));
+			map.put("sequNum", String.valueOf(tmp.getSequNum()));
+			map.put("subtypeNum", String.valueOf(tmp.getSubtypeNum()));
+			map.put("subDdNum", String.valueOf(tmp.getSubDdNum()));
+			node.setAttributes(map);
+
+			list.add(node);
+		}
+		return list;
+	}
+
+	/** 注入dao对象 */
+	@Autowired
+	public void setDataDictionaryTypeDao(DataDictionaryTypeDao dataDictionaryTypeDao) {
+		this.dataDictionaryTypeDao = dataDictionaryTypeDao;
+	}
+}
