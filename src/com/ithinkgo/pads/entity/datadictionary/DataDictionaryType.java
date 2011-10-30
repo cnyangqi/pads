@@ -41,7 +41,7 @@ public class DataDictionaryType extends IdEntity {
 	private Long sequNum;
 
 	/** 子类型数 */
-	private Long subtypeNum;
+	private Long subTypeNum;
 
 	/** 子数据字典数 */
 	private Long subDdNum;
@@ -93,12 +93,12 @@ public class DataDictionaryType extends IdEntity {
 		this.sequNum = value;
 	}
 
-	public Long getSubtypeNum() {
-		return this.subtypeNum;
+	public Long getSubTypeNum() {
+		return subTypeNum;
 	}
 
-	public void setSubtypeNum(Long value) {
-		this.subtypeNum = value;
+	public void setSubTypeNum(Long subTypeNum) {
+		this.subTypeNum = subTypeNum;
 	}
 
 	public Long getSubDdNum() {

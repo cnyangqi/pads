@@ -20,11 +20,16 @@ import com.ithinkgo.pads.entity.datadictionary.DataDictionaryType;
 @Repository
 public class DataDictionaryTypeDao extends HibernateDao<DataDictionaryType, Long> {
 
-	/** 查询数据字典类型树根节点 */
+	/** 通过父级数据字典类型主键查询数据字典类型列表 */
 	@SuppressWarnings("unchecked")
-	public List<DataDictionaryType> queryDataDictionaryTypeTreeRootNode() {
+	public List<DataDictionaryType> queryDataDictionaryTypeTreeView(Long parentId) {
 		Criteria criteria = getSession().createCriteria(DataDictionaryType.class);
-		criteria.add(Restrictions.isNull("parentId"));
+		if (parentId != null) {
+			criteria.add(Restrictions.eq("parentId", parentId));
+		} else {
+			criteria.add(Restrictions.isNull("parentId"));
+		}
 		return criteria.list();
 	}
+
 }

@@ -39,6 +39,18 @@ public class DataDictionaryTypeManager {
 
 	/** 保存新增或修改的对象 */
 	public void saveDataDictionaryType(DataDictionaryType dataDictionaryType) {
+
+		// 如果新增的数据字典类型存在父级类型主键，则该父级数据字典类型的子类型数加1
+		if (dataDictionaryType.getId() == null && dataDictionaryType.getParentId() != null) {
+			DataDictionaryType tmp = dataDictionaryTypeDao.get(dataDictionaryType.getParentId());
+			if (tmp.getSubTypeNum() != null) {
+				tmp.setSubTypeNum(tmp.getSubTypeNum() + 1);
+			} else {
+				tmp.setSubTypeNum(1L);
+			}
+			dataDictionaryTypeDao.save(tmp);
+		}
+
 		dataDictionaryTypeDao.save(dataDictionaryType);
 	}
 
@@ -79,10 +91,9 @@ public class DataDictionaryTypeManager {
 		return dataDictionaryTypeDao.isPropertyUnique("name", newDataDictionaryType, oldDataDictionaryType);
 	}
 
-	/** 查询数据字典类型树根节点 */
-	@Transactional(readOnly = true)
-	public List<TreeNode> queryDataDictionaryTypeTreeRootNode() {
-		Iterator<DataDictionaryType> it = dataDictionaryTypeDao.queryDataDictionaryTypeTreeRootNode().iterator();
+	/** 查询数据字典类型树视图 */
+	public List<TreeNode> queryDataDictionaryTypeTreeView(Long parentId) {
+		Iterator<DataDictionaryType> it = dataDictionaryTypeDao.queryDataDictionaryTypeTreeView(parentId).iterator();
 		List<TreeNode> list = new LinkedList<TreeNode>();
 		while (it.hasNext()) {
 			DataDictionaryType tmp = it.next();
@@ -91,8 +102,8 @@ public class DataDictionaryTypeManager {
 			node.setText(tmp.getName());
 
 			// 当数据字典类型对象的子类型数大于0的时候，表示该类型节点还有子节点，状态为closed
-			Long subTypenum = tmp.getSubtypeNum();
-			if (subTypenum != null && subTypenum > 0) {
+			Long subTypeNum = tmp.getSubTypeNum();
+			if (subTypeNum != null && subTypeNum > 0) {
 				node.setState(TreeNode.CLOSED);
 			} else {
 				node.setState(TreeNode.OPEN);
@@ -102,7 +113,7 @@ public class DataDictionaryTypeManager {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("parentId", String.valueOf(tmp.getParentId()));
 			map.put("sequNum", String.valueOf(tmp.getSequNum()));
-			map.put("subtypeNum", String.valueOf(tmp.getSubtypeNum()));
+			map.put("subTypeNum", String.valueOf(tmp.getSubTypeNum()));
 			map.put("subDdNum", String.valueOf(tmp.getSubDdNum()));
 			node.setAttributes(map);
 

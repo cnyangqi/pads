@@ -29,12 +29,12 @@ public class DatadictionarytypeAction extends CrudActionSupport<DataDictionaryTy
 	private static final long serialVersionUID = 1L;
 	private DataDictionaryTypeManager dataDictionaryTypeManager;
 
-	//- 页面属性 -//
+	// - 页面属性 -//
 	private Long id;
 	private String ids;
 	private DataDictionaryType dataDictionaryType;
 
-	//- ModelDriven 与 Preparable函数 -//
+	// - ModelDriven 与 Preparable函数 -//
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -53,15 +53,11 @@ public class DatadictionarytypeAction extends CrudActionSupport<DataDictionaryTy
 		}
 	}
 
-	public String test() throws Exception {
-		AjaxResponse.ajaxResp(dataDictionaryTypeManager.queryDataDictionaryTypeTreeRootNode());
-		return null;
-	}
-
-	//- CRUD Action 函数 -//
+	// - CRUD Action 函数 -//
 	@Override
 	public String list() throws Exception {
-		AjaxResponse.ajaxResp(dataDictionaryTypeManager.queryAllDataDictionaryType());
+		// 将父节点的主键作为子节点的查询条件（Long parentId）
+		AjaxResponse.ajaxResp(dataDictionaryTypeManager.queryDataDictionaryTypeTreeView(id));
 		return null;
 	}
 
