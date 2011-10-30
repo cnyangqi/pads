@@ -1,97 +1,164 @@
-var saveDataDictionaryTypeUrl = '';// 保存数据字典类型地址
-var queryAllDataDictionaryTypeUrl = '/datadictionary/datadictionarytype.action';// 查询所有数据字典类型地址
-var delDataDictionaryTpye = '';// 删除数据字典类型地址
+var queryDataDictionaryTypeTreeViewUrl = '/datadictionary/datadictionarytype.action';// 查询数据字典类型视图地址
+var saveDataDictionaryTypeUrl = '/datadictionary/datadictionarytype!save.action';// 保存数据字典类型地址
+var deleteDataDictionaryTpye = '/datadictionary/datadictionarytype!delete.action';// 删除数据字典类型地址
 var queryDataDictionaryTypeById = '';// 通过数据字典类型主键查询数据字典类型地址
 
+var selected_node;// 选择的树节点
+var parent_node;// 选择的树节点的父节点
+
 /** 弹出新增数据字典类型窗口 */
-function addSDatadict() {
-	$('#win_datadictionarytype').window({
+function add_ddt() {
+	selected_node = $('#ddt_tree').tree('getSelected');
+	if (selected_node) {
+		$('#text').val(selected_node.text);
+		$('#parentId').val(selected_node.id);
+	}
+
+	$('#win_ddt').window({
 				iconCls : 'icon-dd_add',
 				maximizable : false
 			}).window('setTitle', '新增数据字典类型').window('open');
 }
 
 /** 重置数据字典类型管理窗口 */
-function reset_win_datadict() {
-	$('#form_datadictionarytype').form('clear');
-	$('#id').val(0);
-	$('#sequencenum').val(0);
+function reset_win_ddt() {
+	$('#form_ddt').form('clear');
+	$('#id').val('');
+	$('#sequNum').val(0);
 }
 
 /** 关闭数据字典类型管理窗口 */
-function cancel_win_datadict() {
-	reset_win_datadict();
-	$('#win_datadictionarytype').window('close');
+function cancel_win_ddt() {
+	reset_win_ddt();
+	$('#win_ddt').window('close');
 }
 
 /** 保存数据字典类型到数据库 */
-function saveDatadicTionaryType() {
+function save_ddt() {
+	function test() {
+		console.info($('#ddt_tree').tree('find', selected_node.id));
+	}
+
 	$.ajax({
 				async : true,// required
 				type : 'post',
 				dataType : 'json',
 				timeout : 3000,
 				url : ctx + saveDataDictionaryTypeUrl,
-				data : $('#form_datadictionarytype').serializeObject(),
+				data : $('#form_ddt').serializeObject(),
 				success : function(data) {
-					reset_win_datadict();
-					$('#win_datadictionarytype').window('close');
-					$('#sjzdlx').tree('reload');
+					reset_win_ddt();
+					$('#win_ddt').window('close');
+
+					if (selected_node) {
+
+						if (parent_node) {
+							$('#ddt_tree').tree('reload', parent_node.target);
+						} else {
+							$('#ddt_tree').tree('reload');
+						}
+
+					} else {
+						$('#ddt_tree').tree('reload');
+					}
+
+					test();
+
 				}
 			});
+	
+	$('#ddt_tree').({'onLoadSuccess':function(node, data){alert(1);}});
+	
 }
 
 /** 删除数据字典类型 */
-function delSDatadict() {
-	if ($('#sjzdlx').tree('getChecked').length > 0) {
-		$.messager.confirm('删除确认', '您确认要删除所选择的数据字典类型吗？', function(r) {
-					if (r) {
-						var tmp = [];
-						var selects = $('#sjzdlx').tree('getChecked');
-						for (var i = 0; i < selects.length; i++) {
-							tmp.push(selects[i].id);
-						}
+function delete_ddt() {
+	// if ($('#ddt_tree').tree('getChecked').length > 0) {
+	// $.messager.confirm('删除确认', '您确认要删除所选择的数据字典类型吗？', function(r) {
+	// if (r) {
+	// var tmp = [];
+	// var selects = $('#ddt_tree').tree('getChecked');
+	// for (var i = 0; i < selects.length; i++) {
+	// tmp.push(selects[i].id);
+	// }
+	//
+	// $.ajax({
+	// async : true,// required
+	// type : 'post',
+	// dataType : 'json',
+	// timeout : 3000,
+	// url : ctx + delDataDictionaryTpye,
+	// data : {
+	// 'ids' : tmp.join(',')
+	// },
+	// success : function(data) {
+	// $('#ddt_tree').tree('reload');
+	// }
+	// });
+	// }
+	// });
+	// } else {
+	// showMsg('请选择您要删除的数据字典类型。');
+	// }
 
-						$.ajax({
-									async : true,// required
-									type : 'post',
-									dataType : 'json',
-									timeout : 3000,
-									url : ctx + delDataDictionaryTpye,
-									data : {
-										'ids' : tmp.join(',')
-									},
-									success : function(data) {
-										$('#sjzdlx').tree('reload');
-									}
-								});
-					}
-				});
+	function run_del(b) {
+		if (b) {
+			$.ajax({
+						async : true,// required
+						type : 'post',
+						dataType : 'json',
+						timeout : 3000,
+						url : ctx + deleteDataDictionaryTpye,
+						data : {
+							'id' : selected_node.id
+						},
+						success : function(data) {
+							$('#ddt_tree').tree('reload');
+						}
+					});
+		} else {
+			return;
+		}
+	}
+
+	selected_node = $('#ddt_tree').tree('getSelected');
+	if (selected_node) {
+
+		if (selected_node.attributes.subTypeNum > 0) {// 如果要删除的树节点有子节点
+
+			$.messager.confirm('批量删除确认', '该树节点下面还有子节点，您确认要一起删除吗？', function(b) {
+						run_del(b);
+					});
+
+		} else {
+			run_del(true);
+		}
+
 	} else {
-		showMsg('请选择您要删除的数据字典类型。');
+		showMsg('请选择您要删除的数据字典类型');
 	}
 }
 
 /** 修改数据字典类型 */
-function editDatadict() {
-	if ($('#sjzdlx').tree('getSelected')) {
-		var checked_array = $('#sjzdlx').tree('getChecked');
-		var target = $('#sjzdlx').tree('getSelected');
+function edit_ddt() {
+	if ($('#ddt_tree').tree('getSelected')) {
+		var checked_array = $('#ddt_tree').tree('getChecked');
+		var target = $('#ddt_tree').tree('getSelected');
 		for (var i = 0; i < checked_array.length; i++) {
 			if (checked_array[i].id != target.id) {
-				$('#sjzdlx').tree('uncheck', checked_array[i].target);
+				$('#ddt_tree').tree('uncheck', checked_array[i].target);
 			}
 		}
 
 		// think about selected and checked
 
-		$('#form_datadictionarytype').json2form({
+		$('#form_ddt').json2form({
 					url : ctx + queryDataDictionaryTypeById,
 					data : {
-						'id' : $('#sjzdlx').tree('getSelected').id
+						'id' : $('#ddt_tree').tree('getSelected').id
 					}
 				});
-		$('#win_datadictionarytype').window({
+		$('#win_ddt').window({
 					iconCls : 'datadictionary_edit',
 					maximizable : false
 				}).window('setTitle', '修改数据字典类型').window('open');
@@ -102,17 +169,20 @@ function editDatadict() {
 
 /** 程序初始化 */
 $(function() {
-	$('#sjzdlx').tree({// 数据字典类型树
-		url : ctx + queryAllDataDictionaryTypeUrl,
-		onClick : function(node) {
-			console.dir(node);
-			if (node.checked) {
-				$(this).tree('uncheck', node.target);
-			} else {
-				$(this).tree('check', node.target);
-			}
-		}
-	});
+
+	// 数据字典类型树
+	$('#ddt_tree').tree({
+				url : ctx + queryDataDictionaryTypeTreeViewUrl,
+				onClick : function(node) {
+					$(this).tree('toggle', node.target);
+					selected_node = $(this).tree('getSelected');
+					parent_node = $(this).tree('getParent',
+							selected_node.target);
+
+					alert(selected_node.id);
+
+				}
+			});
 
 	$('#tt').datagrid({
 		nowrap : false,
