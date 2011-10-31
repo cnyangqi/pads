@@ -20,12 +20,12 @@
 
 	<%-- 界面布局 --%>
 	<div region="west" iconCls="icon-dd" title="数据字典类型管理" split="true" style="width:200px; padding:1px; overflow: auto;">
-		<a href="javascript:add_ddt()" class="easyui-linkbutton" plain="true" iconCls="icon-dd_add">新增</a>
+		<a href="javascript:add_win_ddt()" class="easyui-linkbutton" plain="true" iconCls="icon-dd_add">新增</a>
 		<a href="javascript:delete_ddt()" class="easyui-linkbutton" plain="true" iconCls="icon-dd_delete">删除</a>
 		<a href="javascript:edit_ddt()" class="easyui-linkbutton" plain="true" iconCls="icon-dd_edit">修改</a>
 		<hr/>
 		<!-- 数据字典类型树 -->
-		<ul id="tree_ddt" name="tree_ddt" class="easyui-tree" ></ul>
+		<ul id="tree_ddt" class="easyui-tree" ></ul>
 	</div>	
 	
 	<div region="center" iconCls="icon-dd" title="数据字典管理" style="overflow: hidden;">
@@ -75,7 +75,7 @@
 			<div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
 				<a class="easyui-linkbutton" iconCls="icon-ok" href="javascript:void(0)" onclick="save_ddt()">保存</a>
 				<a class="easyui-linkbutton" iconCls="icon-reset" href="javascript:void(0)" onclick="reset_win_ddt()">重置</a>
-				<a class="easyui-linkbutton" iconCls="icon-cancel" href="javascript:void(0)" onclick="cancel_win_ddt()">取消</a>
+				<a class="easyui-linkbutton" iconCls="icon-cancel" href="javascript:void(0)" onclick="close_win_ddt()">取消</a>
 			</div>
 		</div>
 	</div>
