@@ -43,7 +43,7 @@ public class AjaxResponse extends ActionSupport {
 	/** Response action result is success or false */
 	public static void ajaxResp(boolean flag) throws IOException {
 		if (flag) {
-			ajaxResp("{\"success\":\"ture\"}");
+			ajaxResp("{\"success\":\"true\"}");
 		} else {
 			ajaxResp("{\"success\":\"false\"}");
 		}

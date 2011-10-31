@@ -25,7 +25,7 @@
 		<a href="javascript:edit_ddt()" class="easyui-linkbutton" plain="true" iconCls="icon-dd_edit">修改</a>
 		<hr/>
 		<!-- 数据字典类型树 -->
-		<ul id="ddt_tree" class="easyui-tree" ></ul>
+		<ul id="tree_ddt" name="tree_ddt" class="easyui-tree" ></ul>
 	</div>	
 	
 	<div region="center" iconCls="icon-dd" title="数据字典管理" style="overflow: hidden;">
