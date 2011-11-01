@@ -83,34 +83,8 @@ function save_ddt() {
 
 /** 删除数据字典类型 */
 function delete_ddt() {
-	// if ($('#tree_ddt').tree('getChecked').length > 0) {
-	// $.messager.confirm('删除确认', '您确认要删除所选择的数据字典类型吗？', function(r) {
-	// if (r) {
-	// var tmp = [];
-	// var selects = $('#tree_ddt').tree('getChecked');
-	// for (var i = 0; i < selects.length; i++) {
-	// tmp.push(selects[i].id);
-	// }
-	//
-	// $.ajax({
-	// async : true,// required
-	// type : 'post',
-	// dataType : 'json',
-	// timeout : 3000,
-	// url : ctx + delDataDictionaryTpye,
-	// data : {
-	// 'ids' : tmp.join(',')
-	// },
-	// success : function(data) {
-	// $('#tree_ddt').tree('reload');
-	// }
-	// });
-	// }
-	// });
-	// } else {
-	// showMsg('请选择您要删除的数据字典类型。');
-	// }
 
+	// 删除操作 简单传id 后台进行复杂逻辑判断
 	function run_del(b) {
 		if (b) {
 			$.ajax({
@@ -131,7 +105,7 @@ function delete_ddt() {
 		}
 	}
 
-	selected_node = $('#tree_ddt').tree('getSelected');
+	// 删除判断
 	if (selected_node) {
 
 		if (selected_node.attributes.subTypeNum > 0) {// 如果要删除的树节点有子节点

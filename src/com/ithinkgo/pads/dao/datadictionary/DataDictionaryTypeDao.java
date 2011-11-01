@@ -6,6 +6,7 @@ package com.ithinkgo.pads.dao.datadictionary;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springside.modules.orm.hibernate.HibernateDao;
@@ -29,6 +30,7 @@ public class DataDictionaryTypeDao extends HibernateDao<DataDictionaryType, Long
 		} else {
 			criteria.add(Restrictions.isNull("parentId"));
 		}
+		criteria.addOrder(Order.asc("sequNum"));// 按排序号升序排列查询结果
 		return criteria.list();
 	}
 

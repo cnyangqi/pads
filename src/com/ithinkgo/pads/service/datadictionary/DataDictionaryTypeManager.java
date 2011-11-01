@@ -56,6 +56,19 @@ public class DataDictionaryTypeManager {
 
 	/** 按id删除对象 */
 	public void deleteDataDictionaryType(Long id) {
+
+		// 如果删除的数据字典类型存在父级数据字典类型，则该父级数据字典类型的子类型数减1
+		DataDictionaryType dataDictionaryType = dataDictionaryTypeDao.get(id);
+		if (dataDictionaryType.getParentId() != null) {
+			DataDictionaryType tmp = dataDictionaryTypeDao.get(dataDictionaryType.getParentId());
+			tmp.setSubTypeNum(tmp.getSubTypeNum() - 1);
+			dataDictionaryTypeDao.save(tmp);
+		}
+
+		// 删除该数据字典类型下属所有数据字典类型
+		dataDictionaryTypeDao.batchExecute("delete DataDictionaryType t where t.parentId = ?", id);
+
+		// 删除该数据字典类型本身
 		dataDictionaryTypeDao.delete(id);
 	}
 
