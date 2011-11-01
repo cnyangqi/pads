@@ -25,7 +25,7 @@ grant connect,resource,dba to pads;
 -- ubuntu环境下配置为以下 --
 -- create user
 create user pads identified by pads;
-grant connect,resource,dba to pads;
+grant connect,resource,SELECT_CATALOG_ROLE to pads;
 
 -- create sequence 
 create sequence HIBERNATE_SEQUENCE
