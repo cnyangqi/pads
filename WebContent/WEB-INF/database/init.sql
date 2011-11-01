@@ -16,13 +16,18 @@ next 50m maxsize 20480m
 extent management local;
 
 --创建用户并指定表空间 
-create user yangq identified by yangq 
+create user pads identified by pads 
 default tablespace PAD_GAHQTABLESPACE
 temporary tablespace PAD_GAHQTABLESPACE_TEMP;
 --给用户授予权限
-grant connect,resource,dba to yangq;
+grant connect,resource,dba to pads;
 
--- Create sequence 
+-- ubuntu环境下配置为以下 --
+-- create user
+create user pads identified by pads;
+grant connect,resource,dba to pads;
+
+-- create sequence 
 create sequence HIBERNATE_SEQUENCE
 minvalue 1
 maxvalue 999999999999999999999999999
