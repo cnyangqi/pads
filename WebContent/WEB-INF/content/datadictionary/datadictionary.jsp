@@ -61,7 +61,7 @@
 							<td align="right">父级类型：</td>
 							<td>
 								<input id="text" name="text" type="text" readonly="readonly"/>
-								<input id="" name="" type="checkbox"/>
+								<input id="flag" name="flag" type="checkbox"/>
 							</td>
 						</tr>
 						<tr>
