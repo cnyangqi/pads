@@ -105,6 +105,7 @@ public class DataDictionaryTypeManager {
 	}
 
 	/** 查询数据字典类型树视图 */
+	@Transactional(readOnly = true)
 	public List<TreeNode> queryDataDictionaryTypeTreeView(Long parentId) {
 		Iterator<DataDictionaryType> it = dataDictionaryTypeDao.queryDataDictionaryTypeTreeView(parentId).iterator();
 		List<TreeNode> list = new LinkedList<TreeNode>();

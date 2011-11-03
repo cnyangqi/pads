@@ -10,8 +10,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ithinkgo.pads.common.AjaxResponse;
-import com.ithinkgo.pads.entity.datadictionary.DataDictionaryType;
-import com.ithinkgo.pads.service.datadictionary.DataDictionaryTypeManager;
+import com.ithinkgo.pads.entity.datadictionary.DataDictionary;
+import com.ithinkgo.pads.service.datadictionary.DataDictionaryManager;
 import com.ithinkgo.pads.web.CrudActionSupport;
 
 /**
@@ -21,16 +21,16 @@ import com.ithinkgo.pads.web.CrudActionSupport;
  */
 
 @Namespace("/datadictionary")
-@Results({ @Result(name = "reload", location = "DataDictionaryType.action", type = "redirect") })
-public class DatadictionarytypeAction extends CrudActionSupport<DataDictionaryType> {
+@Results({ @Result(name = "reload", location = "DataDictionary.action", type = "redirect") })
+public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 
 	private static final long serialVersionUID = 1L;
-	private DataDictionaryTypeManager dataDictionaryTypeManager;
+	private DataDictionaryManager dataDictionaryManager;
 
 	// - 页面属性 -//
 	private Long id;
 	private String ids;
-	private DataDictionaryType dataDictionaryType;
+	private DataDictionary dataDictionary;
 
 	// - ModelDriven 与 Preparable函数 -//
 	public void setId(Long id) {
@@ -38,56 +38,56 @@ public class DatadictionarytypeAction extends CrudActionSupport<DataDictionaryTy
 	}
 
 	@Override
-	public DataDictionaryType getModel() {
-		return dataDictionaryType;
+	public DataDictionary getModel() {
+		return dataDictionary;
 	}
 
 	@Override
 	protected void prepareModel() throws Exception {
 		if (id != null) {
-			dataDictionaryType = dataDictionaryTypeManager.queryDataDictionaryTypeById(id);
+			dataDictionary = dataDictionaryManager.queryDataDictionaryById(id);
 		} else {
-			dataDictionaryType = new DataDictionaryType();
+			dataDictionary = new DataDictionary();
 		}
 	}
 
 	// - CRUD Action 函数 -//
 	@Override
 	public String list() throws Exception {
-		// 将父节点的主键作为子节点的查询条件（Long parentId）
-		AjaxResponse.ajaxResp(dataDictionaryTypeManager.queryDataDictionaryTypeTreeView(id));
+		// 将主表对象主键作为字表对象的查询条件（Long type）
+		AjaxResponse.ajaxResp(dataDictionaryManager.queryDataDictionaryGridView(id));
 		return null;
 	}
 
 	@Override
 	public String delete() throws Exception {
-		dataDictionaryTypeManager.deleteDataDictionaryType(id);
+		dataDictionaryManager.deleteDataDictionary(id);
 		AjaxResponse.ajaxResp(true);
 		return null;
 	}
 
 	public String batchDelete() throws Exception {
-		dataDictionaryTypeManager.batchDeleteDataDictionaryType(ids);
+		dataDictionaryManager.batchDeleteDataDictionary(ids);
 		AjaxResponse.ajaxResp(true);
 		return null;
 	}
 
 	@Override
 	public String save() throws Exception {
-		dataDictionaryTypeManager.saveDataDictionaryType(dataDictionaryType);
+		dataDictionaryManager.saveDataDictionary(dataDictionary);
 		AjaxResponse.ajaxResp(true);
 		return null;
 	}
 
 	@Override
 	public String input() throws Exception {
-		AjaxResponse.ajaxResp(dataDictionaryTypeManager.queryDataDictionaryTypeById(id));
+		AjaxResponse.ajaxResp(dataDictionaryManager.queryDataDictionaryById(id));
 		return null;
 	}
 
 	@Autowired
-	public void setDataDictionaryTypeManager(DataDictionaryTypeManager dataDictionaryTypeManager) {
-		this.dataDictionaryTypeManager = dataDictionaryTypeManager;
+	public void setDataDictionaryManager(DataDictionaryManager dataDictionaryManager) {
+		this.dataDictionaryManager = dataDictionaryManager;
 	}
 
 	public Long getId() {
