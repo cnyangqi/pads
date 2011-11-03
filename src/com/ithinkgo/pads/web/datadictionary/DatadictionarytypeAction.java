@@ -47,7 +47,7 @@ public class DatadictionarytypeAction extends CrudActionSupport<DataDictionaryTy
 	@Override
 	protected void prepareModel() throws Exception {
 		if (id != null) {
-			dataDictionaryTypeManager.queryDataDictionaryTypeById(id);
+			dataDictionaryType = dataDictionaryTypeManager.queryDataDictionaryTypeById(id);
 		} else {
 			dataDictionaryType = new DataDictionaryType();
 		}
@@ -83,6 +83,7 @@ public class DatadictionarytypeAction extends CrudActionSupport<DataDictionaryTy
 
 	@Override
 	public String input() throws Exception {
+		AjaxResponse.ajaxResp(dataDictionaryTypeManager.queryDataDictionaryTypeById(id));
 		return null;
 	}
 

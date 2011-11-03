@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts2.ServletActionContext;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.springside.modules.utils.encode.JsonBinder;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -21,7 +20,6 @@ import com.opensymphony.xwork2.ActionSupport;
 public class AjaxResponse extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
-	private static ObjectMapper mapper = new ObjectMapper();
 
 	/** Response json format data must be use " not ' */
 	public static void ajaxResp(String json) throws IOException {
@@ -36,8 +34,8 @@ public class AjaxResponse extends ActionSupport {
 	/** Response java object data */
 	public static void ajaxResp(Object object) throws JsonGenerationException, JsonMappingException, IOException {
 		object = null == object ? "" : object;
-		mapper.setSerializationInclusion(Inclusion.NON_NULL);// 只输出非空属性
-		ajaxResp(mapper.writeValueAsString(object));
+		JsonBinder binder = JsonBinder.buildNonNullBinder();
+		ajaxResp(binder.toJson(object));
 	}
 
 	/** Response action result is success or false */

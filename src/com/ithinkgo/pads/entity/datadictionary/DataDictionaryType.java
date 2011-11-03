@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -24,6 +25,7 @@ import com.ithinkgo.pads.entity.IdEntity;
 @Entity
 @Table(name = "DATA_DICTIONARY_TYPE")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class DataDictionaryType extends IdEntity {
 
 	/** 类型名称 */

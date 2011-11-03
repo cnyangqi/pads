@@ -49,8 +49,8 @@
 			<div region="center" style="padding: 10px; background: #fff; border: 1px solid #ccc;overflow: hidden;">
 				<form id="form_ddt" action="" method="post">
 				
-					<input type="hidden" id="id" name="id" value=""/><!-- id -->
-					<input type="hidden" id="parentId" name="parentId" value=""/><!-- parentId -->
+					<input type="hidden" id="id" name="id" /><!-- id -->
+					<input type="hidden" id="parentId" name="parentId" /><!-- parentId -->
 					
 					<table align="center">
 						<tr>
