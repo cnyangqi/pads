@@ -6,14 +6,7 @@
 <head>
 <title>想购网采购配送系统</title>
 <%@ include file="/common/meta.jsp"%>
-<link rel="stylesheet" type="text/css" href="${ctx}/js/jeasyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="${ctx}/js/jeasyui/themes/icon.css">
-<script type="text/javascript" src="${ctx}/js/common/jquery-1.6.min.js"></script>
-<script type="text/javascript" src="${ctx}/js/jeasyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="${ctx}/js/jeasyui/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="${ctx}/js/common/json2form.js"></script>
-<script type="text/javascript" src="${ctx}/js/common/serializeObject.js"></script>
-<script type="text/javascript" src="${ctx}/js/common/common.js"></script>
+<%@ include file="/common/header.jsp"%>
 <script type="text/javascript" src="${ctx}/js/datadictionary/datadictionary.js"></script>
 </head>
 <body class="easyui-layout" style="height: 100%;width: 100%;overflow: hidden;border: none;visibility: hidden;">

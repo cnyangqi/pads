@@ -24,4 +24,6 @@
 		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000000" />
 	<cache name="com.ithinkgo.pads.entity.datadictionary.DataDictionaryType" maxElementsInMemory="10000"
 		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000000" />
+	<cache name="com.ithinkgo.pads.entity.datadictionary.DataDictionary" maxElementsInMemory="10000"
+		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000000" />
 </ehcache>

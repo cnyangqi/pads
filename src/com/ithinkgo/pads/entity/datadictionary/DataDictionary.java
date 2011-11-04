@@ -5,10 +5,6 @@
 package com.ithinkgo.pads.entity.datadictionary;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -30,11 +26,6 @@ public class DataDictionary extends IdEntity {
 
 	//所有属性
 
-	/** 主键 */
-	@Id
-	@SequenceGenerator(name = "SEQ_STORE", sequenceName = "S_DATA_DICTIONARY", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_STORE")
-	private Long id;
 	/** 字典类型 */
 	private Long type;
 	/** 字典名称 */
@@ -51,14 +42,6 @@ public class DataDictionary extends IdEntity {
 	private String extendField2;
 	/** 扩展字段3 */
 	private String extendField3;
-
-	public void setId(Long value) {
-		this.id = value;
-	}
-
-	public Long getId() {
-		return this.id;
-	}
 
 	public Long getType() {
 		return this.type;

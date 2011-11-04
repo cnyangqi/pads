@@ -5,5 +5,5 @@ $(function() {
 });
 
 function ddOnClick() {
-	$('#ifr').attr('src', ctx + '/datadictionary/datadictionary.action');
+	$('#ifr').attr('src', ctx + '/datadictionary/index.action');
 }
