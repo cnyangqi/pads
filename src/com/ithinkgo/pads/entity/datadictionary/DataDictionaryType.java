@@ -36,8 +36,10 @@ public class DataDictionaryType extends IdEntity {
 	private String iconCls;
 
 	/** 父级类型主键 */
-	@JsonProperty("_parentId")
 	private Long parentId;
+
+	/** 父级类型名称 */
+	private String parentName;
 
 	/** 排序号 */
 	private Long sequNum;
@@ -85,6 +87,14 @@ public class DataDictionaryType extends IdEntity {
 
 	public void setParentId(Long value) {
 		this.parentId = value;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 
 	public Long getSequNum() {

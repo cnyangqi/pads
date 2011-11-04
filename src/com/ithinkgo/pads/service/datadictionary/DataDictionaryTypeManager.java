@@ -126,6 +126,7 @@ public class DataDictionaryTypeManager {
 			// 设置树节点属性
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("parentId", String.valueOf(tmp.getParentId()));
+			map.put("parentName", String.valueOf(tmp.getParentName()));
 			map.put("sequNum", String.valueOf(tmp.getSequNum()));
 			map.put("subTypeNum", String.valueOf(tmp.getSubTypeNum()));
 			map.put("subDdNum", String.valueOf(tmp.getSubDdNum()));

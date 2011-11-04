@@ -3,6 +3,8 @@ var saveDataDictionaryTypeUrl = '/datadictionary/datadictionarytype!save.action'
 var deleteDataDictionaryTpyeUrl = '/datadictionary/datadictionarytype!delete.action';// 删除数据字典类型地址
 var queryDataDictionaryTypeByIdUrl = '/datadictionary/datadictionarytype!input.action';// 通过数据字典类型主键查询数据字典类型地址
 
+var queryDataDictionaryTreeViewUrl = '/datadictionary/datadictionary.action';// 查询数据字典视图地址
+
 var selected_node;// 操作节点
 var parent_node;// 父亲节点
 var grandfather_node;// 祖父节点
@@ -22,7 +24,7 @@ function recordNode($tree) {
 function add_win_ddt() {
 
 	if (selected_node) {// 检查新增数据字典类型前是否有预订（选择）过父节点
-		$('#text').val(selected_node.text);
+		$('#parentName').val(selected_node.text);
 		$('#parentId').val(selected_node.id);
 		$('#flag').attr('checked', true);
 	}
@@ -39,9 +41,10 @@ function reset_win_ddt() {
 	$('#form_ddt').form('clear');
 	$('#id').val('');
 	$('#parentId').val('');
-	$('#text').val('');
+	$('#parentName').val('');
 	$('#sequNum').val(0);
 	$('#flag').attr('disabled', false);
+	$('#only_new').show();
 }
 
 /** 关闭数据字典类型管理窗口 */
@@ -132,6 +135,8 @@ function delete_ddt() {
 
 /** 修改数据字典类型 */
 function edit_ddt() {
+	$('#only_new').hide();// 暂不支持修改父级类型
+
 	if (selected_node) {
 
 		$('#form_ddt').json2form({
@@ -158,7 +163,7 @@ $(function() {
 	$('#flag').click(function() {
 		if (!$(this).get(0).checked) {
 			$('#parentId').val('');
-			$('#text').val('');
+			$('#parentName').val('');
 			$(this).attr('disabled', true);
 
 			selected_node = false;
@@ -209,7 +214,7 @@ $(function() {
 						nowrap : false,
 						striped : true,
 						border : false,
-						url : '',
+						url : ctx + queryDataDictionaryTreeViewUrl,
 						// queryParams : {},
 						sortName : '',
 						sortOrder : 'ASC',// DESC 降序，ASC升序
@@ -227,7 +232,7 @@ $(function() {
 								// align : 'right'
 								// },
 								{
-									field : 'type',
+									field : 'typeName',
 									title : '数据字典类型',
 									width : 100
 								},
@@ -262,23 +267,20 @@ $(function() {
 									title : '操作',
 									rowspan : 3,
 									width : 190,
-									formatter : function(value, rec) {
-										var stop = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: stopUser(\''
-												+ rec.id + '\');">';
+									formatter : function(value, rec) {// jquery button try
+										var stop = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: stopUser(\'' + rec.id + '\');">';
 										stop += ' <span class="l-btn-left" style="float: left;">';
-										stop += ' <span class="l-btn-text user" style="padding-left: 20px;">停用</span>';
+										stop += ' <span class="l-btn-text icon-dd_add" style="padding-left: 20px;">停用</span>';
 										stop += ' </span>';
 										stop += ' </a>';
-										var edit = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: editUser(\''
-												+ rec.id + '\');">';
+										var edit = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: editUser(\''	+ rec.id + '\');">';
 										edit += ' <span class="l-btn-left" style="float: left;">';
-										edit += ' <span class="l-btn-text user_edit" style="padding-left: 20px;">修改</span>';
+										edit += ' <span class="l-btn-text icon-dd_edit" style="padding-left: 20px;">修改</span>';
 										edit += ' </span>';
 										edit += ' </a>';
-										var del = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: delUser(\''
-												+ rec.id + '\');">';
+										var del = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: delUser(\'' + rec.id + '\');">';
 										del += ' <span class="l-btn-left" style="float: left;">';
-										del += ' <span class="l-btn-text user_del" style="padding-left: 20px;">删除</span>';
+										del += ' <span class="l-btn-text icon-dd_delete" style="padding-left: 20px;">删除</span>';
 										del += ' </span>';
 										del += ' </a>';
 										return stop + edit + del;

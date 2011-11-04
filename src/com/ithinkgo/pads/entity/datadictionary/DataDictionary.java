@@ -26,29 +26,47 @@ public class DataDictionary extends IdEntity {
 
 	//所有属性
 
-	/** 字典类型 */
-	private Long type;
+	/** 字典类型主键 */
+	private Long typeId;
+
+	/** 字典类型名称*/
+	private String typeName;
+
 	/** 字典名称 */
 	private String name;
+
 	/** 字典值 */
 	private String value;
+
 	/** 字典状态 */
 	private String status;
+
 	/** 排序号 */
 	private Long sequNum;
+
 	/** 扩展字段1 */
 	private String extendField1;
+
 	/** 扩展字段2 */
 	private String extendField2;
+
 	/** 扩展字段3 */
 	private String extendField3;
 
-	public Long getType() {
-		return this.type;
+	public Long getTypeId() {
+		return typeId;
 	}
 
-	public void setType(Long value) {
-		this.type = value;
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 	public String getName() {

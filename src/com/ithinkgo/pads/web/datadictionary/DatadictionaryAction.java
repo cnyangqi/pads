@@ -30,6 +30,8 @@ public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 	// - 页面属性 -//
 	private Long id;
 	private String ids;
+	private int page;// jeasyui datagrid
+	private int rows;// jeasyui datagrid
 	private DataDictionary dataDictionary;
 
 	// - ModelDriven 与 Preparable函数 -//
@@ -54,8 +56,8 @@ public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 	// - CRUD Action 函数 -//
 	@Override
 	public String list() throws Exception {
-		// 将主表对象主键作为字表对象的查询条件（Long type）
-		AjaxResponse.ajaxResp(dataDictionaryManager.queryDataDictionaryGridView(id));
+		// 将主表对象主键作为字表对象的分页查询条件（Long typeId）
+		AjaxResponse.ajaxResp(dataDictionaryManager.queryDataDictionaryGridView(id, page, rows));
 		return null;
 	}
 
@@ -100,6 +102,22 @@ public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 
 	public void setIds(String ids) {
 		this.ids = ids;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
 	}
 
 }

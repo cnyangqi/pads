@@ -113,9 +113,17 @@ public class DataDictionaryManager {
 
 	/** 查询对象列表视图 */
 	@Transactional(readOnly = true)
-	public Map<String, Object> queryDataDictionaryGridView(Long id) {
+	public Map<String, Object> queryDataDictionaryGridView(Long typeId, int pageNo, int pageSize) {
+
+		Page<DataDictionary> page = new Page<DataDictionary>(pageSize);
+		page.setPageNo(pageNo);
+		page = dataDictionaryDao.queryDataDictionaryGridView(typeId, page);
+
 		Map<String, Object> map = new HashMap<String, Object>();
-		return null;
+		map.put("total", page.getTotalCount());
+		map.put("rows", page.getResult());
+
+		return map;
 	}
 
 	/** 注入dao对象 */

@@ -37,7 +37,7 @@
 	</div>
 	
 	<%-- 数据字典类型窗口 --%>
-	<div id="win_ddt" class="easyui-window" closed="true" modal="true" title="数据字典类型管理" iconCls="icon-user" style="width: 300px; height: 180px; padding: 5px; background: #fafafa;">
+	<div id="win_ddt" class="easyui-window" closed="true" modal="true" title="数据字典类型管理" style="width: 300px; height: 180px; padding: 5px; background: #fafafa;">
 		<div class="easyui-layout" fit="true">
 			<div region="center" style="padding: 10px; background: #fff; border: 1px solid #ccc;overflow: hidden;">
 				<form id="form_ddt" action="" method="post">
@@ -50,10 +50,10 @@
 							<td align="right">类型名称：</td>
 							<td><input id="name" name="name" type="text" class="easyui-validatebox" required="true" validType="length[2,50]"/><font color="red">*</font></td>
 						</tr>
-						<tr>
+						<tr id="only_new">
 							<td align="right">父级类型：</td>
 							<td>
-								<input id="text" name="text" type="text" readonly="readonly"/>
+								<input id="parentName" name="parentName" type="text" readonly="readonly"/>
 								<input id="flag" name="flag" type="checkbox"/>
 							</td>
 						</tr>
