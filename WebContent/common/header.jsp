@@ -7,7 +7,7 @@
 <script type="text/javascript" src="${ctx}/js/common/serializeObject.js"></script>
 <script type="text/javascript" src="${ctx}/js/common/common.js"></script>
 
-/** context,this code must be in jsp file */
+<%-- context,this code must be in jsp file --%>
 <script type="text/javascript">
 	var ctx = '${pageContext.request.contextPath}';
 </script>

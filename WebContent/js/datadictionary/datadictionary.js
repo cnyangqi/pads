@@ -4,6 +4,7 @@ var deleteDataDictionaryTpyeUrl = '/datadictionary/datadictionarytype!delete.act
 var queryDataDictionaryTypeByIdUrl = '/datadictionary/datadictionarytype!input.action';// 通过数据字典类型主键查询数据字典类型地址
 
 var queryDataDictionaryTreeViewUrl = '/datadictionary/datadictionary.action';// 查询数据字典视图地址
+var saveDataDictionaryUrl = '/datadictionary/datadictionary!save.action';// 保存数据字典地址
 
 var selected_node;// 操作节点
 var parent_node;// 父亲节点
@@ -24,26 +25,40 @@ function recordNode($tree) {
 function add_win_ddt() {
 
 	if (selected_node) {// 检查新增数据字典类型前是否有预订（选择）过父节点
-		$('#parentName').val(selected_node.text);
-		$('#parentId').val(selected_node.id);
-		$('#flag').attr('checked', true);
+		$('#form_ddt input[name="parentName"]').get(0).value = selected_node.text;
+		$('#form_ddt input[name="parentId"]').get(0).value = selected_node.id;
 	}
 
 	$('#win_ddt').window({
-		iconCls : 'icon-dd_add',
-		maximizable : false
-	}).window('setTitle', '新增数据字典类型').window('open');
+				iconCls : 'icon-dd_add',
+				maximizable : false
+			}).window('setTitle', '新增数据字典类型').window('open');
+
+}
+
+/** 打开新增数据字典窗口 */
+function add_win_dd() {
+
+	if (selected_node) {// 检查新增数据字典前是否有预订（选择）过父节点
+		$('#form_dd input[name="typeName"]').get(0).value = selected_node.text;
+		$('#form_dd input[name="typeId"]').get(0).value = selected_node.id;
+	}
+
+	$('#win_dd').window({
+				iconCls : 'icon-dd_add',
+				maximizable : false
+			}).window('setTitle', '新增数据字典').window('open');
 
 }
 
 /** 重置数据字典类型管理窗口 */
 function reset_win_ddt() {
 	$('#form_ddt').form('clear');
-	$('#id').val('');
-	$('#parentId').val('');
-	$('#parentName').val('');
-	$('#sequNum').val(0);
-	$('#flag').attr('disabled', false);
+	$('#form_ddt input[name="id"]').get(0).value = '';
+	$('#form_ddt input[name="parentId"]').get(0).value = '';
+	$('#form_ddt input[name="parentName"]').get(0).value = '';
+	$('#form_ddt input[name="sequNum"]').get(0).value = '';
+
 	$('#only_new').show();
 }
 
@@ -53,9 +68,57 @@ function close_win_ddt() {
 	$('#win_ddt').window('close');
 }
 
+/** 重置数据字典管理窗口 */
+function reset_win_dd() {
+	$('#form_dd').form('clear');
+	$('#form_dd input[name="id"]').get(0).value = '';
+	$('#form_dd input[name="typeId"]').get(0).value = '';
+	$('#form_dd input[name="typeName"]').get(0).value = '';
+	$('#form_dd input[name="value"]').get(0).value = '';
+	$('#form_dd input[name="sequNum"]').get(0).value = '';
+}
+
+/** 关闭数据字典管理窗口 */
+function close_win_dd() {
+	reset_win_dd();
+	$('#win_dd').window('close');
+}
+
 /** 保存数据字典类型到数据库 */
 function save_ddt() {
+
+	// -- 紧急备用代码，切勿删除。 -- //
+	// if ($('#form_ddt').form('validate')) {
+	//
+	// $.ajax({
+	// async : true,// required
+	// type : 'post',
+	// dataType : 'json',
+	// timeout : 10000,
+	// url : ctx + saveDataDictionaryTypeUrl,
+	// data : $('#form_ddt').serializeObject(),
+	// success : function(data) {
+	// close_win_ddt();
+	//
+	// if (selected_node) {
+	// if (parent_node) {// 如果父亲节点存在，则新增节点类型为普通子节点
+	// $('#tree_ddt').tree('reload',
+	// parent_node.target);
+	// return;
+	// }
+	// }
+	// $('#tree_ddt').tree('reload');// 刷新树根节点
+	// }
+	// });
+	//
+	// }
+
 	$('#form_ddt').submit();
+}
+
+/** 保存数据字典到数据库 */
+function save_dd() {
+	$('#form_dd').submit();
 }
 
 /** 删除数据字典类型 */
@@ -64,52 +127,47 @@ function delete_ddt() {
 	// 删除操作 简单传id 后台进行复杂逻辑判断
 	function run_del(b) {
 		if (b) {
-			$
-					.ajax({
-						async : true,// required
-						type : 'post',
-						dataType : 'json',
-						timeout : 10000,
-						url : ctx + deleteDataDictionaryTpyeUrl,
-						data : {
-							'id' : selected_node.id
-						},
-						success : function(data) {
+			$.ajax({
+				async : true,// required
+				type : 'post',
+				dataType : 'json',
+				timeout : 10000,
+				url : ctx + deleteDataDictionaryTpyeUrl,
+				data : {
+					'id' : selected_node.id
+				},
+				success : function(data) {
 
-							if (grandfather_node) {// 如果存在祖父节点，则父亲节点不是树的根节点
-								if (parent_node.attributes.subTypeNum == 1) {// 父亲节点下属节点只有一个，即删除操作节点
-									$('#tree_ddt').tree('reload',
-											grandfather_node.target);
+					if (grandfather_node) {// 如果存在祖父节点，则父亲节点不是树的根节点
+						if (parent_node.attributes.subTypeNum == 1) {// 父亲节点下属节点只有一个，即删除操作节点
+							$('#tree_ddt').tree('reload',
+									grandfather_node.target);
 
-									selected_node = grandfather_node;// 刷新完成，操作节点指向祖父节点
+							selected_node = grandfather_node;// 刷新完成，操作节点指向祖父节点
 
-								} else {
-									parent_node.attributes.subTypeNum--;// 手动刷新树节点状态
-									$('#tree_ddt')
-											.tree(
-													'update',
-													{
-														target : parent_node.target,
-														'attributes["subTypeNum"]' : parent_node.attributes.subTypeNum
-													});
+						} else {
+							parent_node.attributes.subTypeNum--;// 手动刷新树节点状态
+							$('#tree_ddt').tree('update', {
+								target : parent_node.target,
+								'attributes["subTypeNum"]' : parent_node.attributes.subTypeNum
+							});
 
-									$('#tree_ddt').tree('reload',
-											parent_node.target);
+							$('#tree_ddt').tree('reload', parent_node.target);
 
-									selected_node = parent_node;// 刷新完成，操作节点指向父亲节点
-
-								}
-							} else {// 删除根节点或其直接下属节点
-								$('#tree_ddt').tree('reload');
-								if (parent_node) {// 如果被删除节点为根节点下属节点，则将操作节点指向父亲节点
-									selected_node = parent_node;
-								} else {
-									selected_node = false;// 操作节点已经被删除
-								}
-							}
+							selected_node = parent_node;// 刷新完成，操作节点指向父亲节点
 
 						}
-					});
+					} else {// 删除根节点或其直接下属节点
+						$('#tree_ddt').tree('reload');
+						if (parent_node) {// 如果被删除节点为根节点下属节点，则将操作节点指向父亲节点
+							selected_node = parent_node;
+						} else {
+							selected_node = false;// 操作节点已经被删除
+						}
+					}
+
+				}
+			});
 		} else {
 			return;
 		}
@@ -121,8 +179,8 @@ function delete_ddt() {
 		if (selected_node.attributes.subTypeNum > 0) {// 如果要删除的树节点有子节点
 
 			$.messager.confirm('批量删除确认', '该树节点下面还有子节点，您确认要一起删除吗？', function(b) {
-				run_del(b);
-			});
+						run_del(b);
+					});
 
 		} else {// 操作节点无下属节点的时候，无需提示直接删除
 			run_del(true);
@@ -140,180 +198,204 @@ function edit_ddt() {
 	if (selected_node) {
 
 		$('#form_ddt').json2form({
-			url : ctx + queryDataDictionaryTypeByIdUrl,
-			data : {
-				'id' : selected_node.id
-			}
-		});
+					url : ctx + queryDataDictionaryTypeByIdUrl,
+					data : {
+						'id' : selected_node.id
+					}
+				});
 
 		$('#win_ddt').window({
-			iconCls : 'datadictionary_edit',
-			maximizable : false
-		}).window('setTitle', '修改数据字典类型').window('open');
+					iconCls : 'datadictionary_edit',
+					maximizable : false
+				}).window('setTitle', '修改数据字典类型').window('open');
 
 	} else {
 		showMsg('请选择您要修改的数据字典类型');
 	}
 }
 
+/** 保存选择的父级数据字典类型 */
+function save_select_ddt() {
+	var node = $('#tree_select_ddt').tree('getSelected');
+	$('#form_ddt input[name="parentId"]').get(0).value = node.id;
+	$('#form_ddt input[name="parentName"]').get(0).value = node.text;
+	close_win_select_ddt();
+}
+
+/** 关闭选择父级数据字典类型窗口 */
+function close_win_select_ddt() {
+	$('#win_select_ddt').window('close');
+}
+
 /** 程序初始化 */
 $(function() {
 
-	// 特例，新增树根节点，释放操作节点、父亲节点以及祖父节点状态
-	$('#flag').click(function() {
-		if (!$(this).get(0).checked) {
-			$('#parentId').val('');
-			$('#parentName').val('');
-			$(this).attr('disabled', true);
+	// 弹出选择父级数据字典类型窗口
+	$('#select_parent').click(function() {
 
-			selected_node = false;
-			parent_node = false;
-			grandfather_node = false;
-		}
-	});
+				$('#tree_select_ddt').tree({
+							url : ctx + queryDataDictionaryTypeTreeViewUrl,
+							onClick : function(node) {
+								$(this).tree('toggle', node.target);
+							}
+						});
+
+				$('#win_select_ddt').window({
+							iconCls : 'icon-dd',
+							maximizable : false
+						}).window('setTitle', '选择父级数据字典类型').window('open');
+			});
 
 	// 数据字典类型树
 	$('#tree_ddt').tree({
-		url : ctx + queryDataDictionaryTypeTreeViewUrl,
-		onClick : function(node) {// 配置树节点单击开关函数，同时记录当前操作节点以及其父亲节点、祖父节点
-			$(this).tree('toggle', node.target);
-			recordNode($(this));
-		},
-		onLoadSuccess : function() {// 当树reload完毕，恢复操作节点的选择状态，并更新操作节点等状态
-			if (selected_node) {
-				var node = $(this).tree('find', selected_node.id);
-				$(this).tree('select', node.target);
-				$(this).tree('expand', node.target);
-			}
-			recordNode($(this));
-		}
-	});
+				url : ctx + queryDataDictionaryTypeTreeViewUrl,
+				onClick : function(node) {// 配置树节点单击开关函数，同时记录当前操作节点以及其父亲节点、祖父节点
+					$(this).tree('toggle', node.target);
+					recordNode($(this));
+					$('#tt').datagrid('reload', {
+								id : node.id
+							});
+				},
+				onLoadSuccess : function() {// 当树reload完毕，恢复操作节点的选择状态，并更新操作节点等状态
+					if (selected_node) {
+						var node = $(this).tree('find', selected_node.id);
+						$(this).tree('select', node.target);
+						$(this).tree('expand', node.target);
+					}
+					recordNode($(this));
+				}
+			});
 
 	// 数据字典类型表单异步提交
 	$('#form_ddt').form({
-		url : ctx + saveDataDictionaryTypeUrl,
-		onSubmit : function() {
-			return $(this).form('validate');
-		},
-		success : function(data) {
-			close_win_ddt();
+				url : ctx + saveDataDictionaryTypeUrl,
+				onSubmit : function() {
+					return $(this).form('validate');
+				},
+				success : function(data) {
+					close_win_ddt();
 
-			if (selected_node) {
-				if (parent_node) {// 如果父亲节点存在，则新增节点类型为普通子节点
-					$('#tree_ddt').tree('reload', parent_node.target);
-					return;
+					if (selected_node) {
+						if (parent_node) {// 如果父亲节点存在，则新增节点类型为普通子节点
+							$('#tree_ddt').tree('reload', parent_node.target);
+							return;
+						}
+					}
+					$('#tree_ddt').tree('reload');// 刷新树根节点
 				}
-			}
-			$('#tree_ddt').tree('reload');// 刷新树根节点
-		}
+			});
+
+	// 数据字典表单异步提交
+	$('#form_dd').form({
+				url : ctx + saveDataDictionaryUrl,
+				onSubmit : function() {
+					return $(this).form('validate');
+				},
+				success : function(data) {
+					close_win_dd();
+					$('#tt').datagrid('reload');
+				}
+			});
+
+	$('#tt').datagrid({
+		nowrap : false,
+		striped : true,
+		border : false,
+		url : ctx + queryDataDictionaryTreeViewUrl,
+		// queryParams : {},
+		sortName : '',
+		sortOrder : 'ASC',// DESC 降序，ASC升序
+		columns : [[{
+					field : 'ck',
+					title : '全选取消',
+					checkbox : true,
+					width : 80
+				},
+				// {
+				// field : 'productid',
+				// title : '序号',
+				// width : 100,
+				// align : 'right'
+				// },
+				{
+					field : 'typeName',
+					title : '数据字典类型',
+					width : 100
+				}, {
+					field : 'name',
+					title : '数据字典名称',
+					width : 100
+				}, {
+					field : 'value',
+					title : '数据字典值',
+					width : 100
+				}, {
+					field : 'status',
+					title : '数据字典状态',
+					width : 100,
+					formatter : function(value, rec) {
+						// var s = value.replace(/,/g, "");
+						// var lastIndex =
+						// value.lastIndexOf(',') + 1;
+						// var ss = value.substring(lastIndex);
+						// if(ss.length>5){
+						// ss=ss.substring(0, 5)+"...";
+						// }
+						// return "<a title='" + s + "'>" + ss +
+						// "</a>";
+					}
+				}, {
+					field : 'action',
+					title : '操作',
+					rowspan : 3,
+					width : 190,
+					formatter : function(value, rec) {// jquery button try
+						var stop = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: stopUser(\''
+								+ rec.id + '\');">';
+						stop += ' <span class="l-btn-left" style="float: left;">';
+						stop += ' <span class="l-btn-text icon-dd_add" style="padding-left: 20px;">停用</span>';
+						stop += ' </span>';
+						stop += ' </a>';
+						var edit = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: editUser(\''
+								+ rec.id + '\');">';
+						edit += ' <span class="l-btn-left" style="float: left;">';
+						edit += ' <span class="l-btn-text icon-dd_edit" style="padding-left: 20px;">修改</span>';
+						edit += ' </span>';
+						edit += ' </a>';
+						var del = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: delUser(\''
+								+ rec.id + '\');">';
+						del += ' <span class="l-btn-left" style="float: left;">';
+						del += ' <span class="l-btn-text icon-dd_delete" style="padding-left: 20px;">删除</span>';
+						del += ' </span>';
+						del += ' </a>';
+						return stop + edit + del;
+					}
+				}]],
+		toolbar : [{
+					id : 'btnadd',
+					text : '新增',
+					iconCls : 'icon-dd_add',
+					handler : function() {
+						add_win_dd();
+					}
+				}, {
+					id : 'btncut',
+					text : '批量删除',
+					iconCls : 'icon-dd_delete',
+					handler : function() {
+						var selects = $('#tt').datagrid('getSelections');
+						var tmp = [];
+						for (var i = 0; i < selects.length; i++) {
+							tmp.push(selects[i].id);
+						}
+						if (tmp.length > 0) {
+							delUser(tmp.join(','));
+						}
+					}
+				}],
+		pagination : true,
+		rownumbers : true
 	});
-
-	$('#tt')
-			.datagrid(
-					{
-						nowrap : false,
-						striped : true,
-						border : false,
-						url : ctx + queryDataDictionaryTreeViewUrl,
-						// queryParams : {},
-						sortName : '',
-						sortOrder : 'ASC',// DESC 降序，ASC升序
-						columns : [ [
-								{
-									field : 'ck',
-									title : '全选取消',
-									checkbox : true,
-									width : 80
-								},
-								// {
-								// field : 'productid',
-								// title : '序号',
-								// width : 100,
-								// align : 'right'
-								// },
-								{
-									field : 'typeName',
-									title : '数据字典类型',
-									width : 100
-								},
-								{
-									field : 'name',
-									title : '数据字典名称',
-									width : 100
-								},
-								{
-									field : 'value',
-									title : '数据字典值',
-									width : 100
-								},
-								{
-									field : 'status',
-									title : '数据字典状态',
-									width : 100,
-									formatter : function(value, rec) {
-										// var s = value.replace(/,/g, "");
-										// var lastIndex =
-										// value.lastIndexOf(',') + 1;
-										// var ss = value.substring(lastIndex);
-										// if(ss.length>5){
-										// ss=ss.substring(0, 5)+"...";
-										// }
-										// return "<a title='" + s + "'>" + ss +
-										// "</a>";
-									}
-								},
-								{
-									field : 'action',
-									title : '操作',
-									rowspan : 3,
-									width : 190,
-									formatter : function(value, rec) {// jquery button try
-										var stop = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: stopUser(\'' + rec.id + '\');">';
-										stop += ' <span class="l-btn-left" style="float: left;">';
-										stop += ' <span class="l-btn-text icon-dd_add" style="padding-left: 20px;">停用</span>';
-										stop += ' </span>';
-										stop += ' </a>';
-										var edit = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: editUser(\''	+ rec.id + '\');">';
-										edit += ' <span class="l-btn-left" style="float: left;">';
-										edit += ' <span class="l-btn-text icon-dd_edit" style="padding-left: 20px;">修改</span>';
-										edit += ' </span>';
-										edit += ' </a>';
-										var del = '<a class="l-btn l-btn-plain" style="float:left;" href="javascript: delUser(\'' + rec.id + '\');">';
-										del += ' <span class="l-btn-left" style="float: left;">';
-										del += ' <span class="l-btn-text icon-dd_delete" style="padding-left: 20px;">删除</span>';
-										del += ' </span>';
-										del += ' </a>';
-										return stop + edit + del;
-									}
-								} ] ],
-						toolbar : [
-								{
-									id : 'btnadd',
-									text : '新增',
-									iconCls : 'icon-dd_add',
-									handler : function() {
-
-									}
-								},
-								{
-									id : 'btncut',
-									text : '批量删除',
-									iconCls : 'icon-dd_delete',
-									handler : function() {
-										var selects = $('#tt').datagrid(
-												'getSelections');
-										var tmp = [];
-										for ( var i = 0; i < selects.length; i++) {
-											tmp.push(selects[i].id);
-										}
-										if (tmp.length > 0) {
-											delUser(tmp.join(','));
-										}
-									}
-								} ],
-						pagination : true,
-						rownumbers : true
-					});
 
 });
 

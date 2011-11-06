@@ -41,7 +41,9 @@ public class DataDictionaryDao extends HibernateDao<DataDictionary, Long> {
 	// 将主表对象主键作为字表对象的分页查询条件（Long typeId）
 	public Page<DataDictionary> queryDataDictionaryGridView(Long typeId, Page<DataDictionary> page) {
 		List<PropertyFilter> filters = new LinkedList<PropertyFilter>();
-		//filters.add(new PropertyFilter("EQL_typeId", String.valueOf(typeId)));
+		if (typeId != null) {
+			filters.add(new PropertyFilter("EQL_typeId", String.valueOf(typeId)));
+		}
 		return this.findPage(page, filters);
 	}
 }

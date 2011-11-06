@@ -25,8 +25,8 @@
 		<div class="easyui-layout" fit="true"> 
 			<div class="easyui-panel" region="north" border="false" style="height: 60px; overflow: hidden;">
 				<div style="clear: both;" class="SearchArea">
-					字典类型：<input id="type" type="text" size="10"/>
-					字典名称：<input id="name" type="text" size="10"/>
+					字典类型：<input name="type" type="text" size="10"/>
+					字典名称：<input name="name" type="text" size="10"/>
 				<a href="javascript:queryDatadict()" class="easyui-linkbutton" plain="true" icon="icon-search" >查询</a>
 				</div>
 			</div>
@@ -36,30 +36,44 @@
 		</div>
 	</div>
 	
+	<%-- 选择父级数据字典类型窗口 --%>
+	<div id="win_select_ddt" class="easyui-window" closed="true" modal="true" style="width: 220px; height: 320px; padding: 5px; background: #fafafa;">
+		<div class="easyui-layout" fit="true">
+			<div region="center" style="padding: 10px; background: #fff; border: 1px solid #ccc;overflow: hidden;">
+				<!-- 选择数据字典类型树 -->
+				<ul id="tree_select_ddt" class="easyui-tree" ></ul>
+			</div>
+				<div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
+				<a class="easyui-linkbutton" iconCls="icon-ok" href="javascript:void(0)" onclick="save_select_ddt()">保存</a>
+				<a class="easyui-linkbutton" iconCls="icon-cancel" href="javascript:void(0)" onclick="close_win_select_ddt()">取消</a>
+			</div>
+		</div>
+	</div>
+	
 	<%-- 数据字典类型窗口 --%>
-	<div id="win_ddt" class="easyui-window" closed="true" modal="true" title="数据字典类型管理" style="width: 300px; height: 180px; padding: 5px; background: #fafafa;">
+	<div id="win_ddt" class="easyui-window" closed="true" modal="true" title="数据字典类型管理" style="width: 320px; height: 180px; padding: 5px; background: #fafafa;">
 		<div class="easyui-layout" fit="true">
 			<div region="center" style="padding: 10px; background: #fff; border: 1px solid #ccc;overflow: hidden;">
 				<form id="form_ddt" action="" method="post">
 				
-					<input type="hidden" id="id" name="id" /><!-- id -->
-					<input type="hidden" id="parentId" name="parentId" /><!-- parentId -->
+					<input type="hidden" name="id" /><!-- id -->
+					<input type="hidden" name="parentId" /><!-- parentId -->
 					
 					<table align="center">
 						<tr>
 							<td align="right">类型名称：</td>
-							<td><input id="name" name="name" type="text" class="easyui-validatebox" required="true" validType="length[2,50]"/><font color="red">*</font></td>
+							<td><input name="name" type="text" class="easyui-validatebox" required="true" validType="length[2,50]"/><font color="red">*</font></td>
 						</tr>
 						<tr id="only_new">
 							<td align="right">父级类型：</td>
 							<td>
-								<input id="parentName" name="parentName" type="text" readonly="readonly"/>
-								<input id="flag" name="flag" type="checkbox"/>
+								<input name="parentName" type="text" readonly="readonly"/>
+								<input id="select_parent" name="select_parent" type="button" value="..."/>
 							</td>
 						</tr>
 						<tr>
 							<td align="right">排序号：</td>
-							<td><input id="sequNum" name="sequNum" type="text" /></td>
+							<td><input name="sequNum" type="text" /></td>
 						</tr>
 					</table>
 					
@@ -67,8 +81,55 @@
 			</div>
 			<div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
 				<a class="easyui-linkbutton" iconCls="icon-ok" href="javascript:void(0)" onclick="save_ddt()">保存</a>
-				<a class="easyui-linkbutton" iconCls="icon-reset" href="javascript:void(0)" onclick="reset_win_ddt()">重置</a>
+				<%-- <a class="easyui-linkbutton" iconCls="icon-reset" href="javascript:void(0)" onclick="reset_win_ddt()">重置</a> --%>
 				<a class="easyui-linkbutton" iconCls="icon-cancel" href="javascript:void(0)" onclick="close_win_ddt()">取消</a>
+			</div>
+		</div>
+	</div>
+	
+	<%-- 数据字典窗口 --%>
+	<div id="win_dd" class="easyui-window" closed="true" modal="true" title="数据字典管理" style="width: 350px; height: 210px; padding: 5px; background: #fafafa;">
+		<div class="easyui-layout" fit="true">
+			<div region="center" style="padding: 10px; background: #fff; border: 1px solid #ccc;overflow: hidden;">
+				<form id="form_dd" action="" method="post">
+				
+					<input type="hidden" name="id" /><!-- id -->
+					<input type="hidden" name="typeId" /><!-- typeId -->
+					
+					<table align="center">
+						<tr>
+							<td align="right">字典类型：</td>
+							<td>
+							<input name="typeName" type="text" class="easyui-validatebox" required="true" readonly="readonly"/>
+							<font color="red">*</font>
+							<input id="select_type" name="select_type" type="button" value="..."/>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">字典名称：</td>
+							<td>
+							<input name="name" type="text" class="easyui-validatebox" required="true"/>
+							<font color="red">*</font>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">字典值：</td>
+							<td>
+								<input name="value" type="text" class="easyui-validatebox" required="true"/>
+								<font color="red">*</font>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">排序号：</td>
+							<td><input name="sequNum" type="text" /></td>
+						</tr>
+					</table>
+					
+				</form>
+			</div>
+			<div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
+				<a class="easyui-linkbutton" iconCls="icon-ok" href="javascript:void(0)" onclick="save_dd()">保存</a>
+				<a class="easyui-linkbutton" iconCls="icon-cancel" href="javascript:void(0)" onclick="close_win_dd()">取消</a>
 			</div>
 		</div>
 	</div>
