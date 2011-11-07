@@ -25,9 +25,10 @@
 		<div class="easyui-layout" fit="true"> 
 			<div class="easyui-panel" region="north" border="false" style="height: 60px; overflow: hidden;">
 				<div style="clear: both;" class="SearchArea">
-					字典类型：<input name="type" type="text" size="10"/>
-					字典名称：<input name="name" type="text" size="10"/>
-				<a href="javascript:queryDatadict()" class="easyui-linkbutton" plain="true" icon="icon-search" >查询</a>
+					类型名称：<input id="dd_type" name="dd_type" type="text" size="10"/>
+					字典名称：<input id="dd_name" name="dd_name" type="text" size="10"/>
+					<a href="javascript:query_data_dictionary()" class="easyui-linkbutton" plain="true" icon="icon-search" >查询</a>
+					<a href="javascript:query_reset()" class="easyui-linkbutton" plain="true" icon="icon-refresh" >重置</a>
 				</div>
 			</div>
 			<div region="center" style="border: 1px;">
@@ -46,6 +47,20 @@
 				<div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
 				<a class="easyui-linkbutton" iconCls="icon-ok" href="javascript:void(0)" onclick="save_select_ddt()">保存</a>
 				<a class="easyui-linkbutton" iconCls="icon-cancel" href="javascript:void(0)" onclick="close_win_select_ddt()">取消</a>
+			</div>
+		</div>
+	</div>
+	
+	<%-- 选择父级数据字典类型窗口 --%>
+	<div id="win_select_dd" class="easyui-window" closed="true" modal="true" style="width: 220px; height: 320px; padding: 5px; background: #fafafa;">
+		<div class="easyui-layout" fit="true">
+			<div region="center" style="padding: 10px; background: #fff; border: 1px solid #ccc;overflow: hidden;">
+				<!-- 选择数据字典类型树 -->
+				<ul id="tree_select_dd" class="easyui-tree" ></ul>
+			</div>
+				<div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
+				<a class="easyui-linkbutton" iconCls="icon-ok" href="javascript:void(0)" onclick="save_select_dd()">保存</a>
+				<a class="easyui-linkbutton" iconCls="icon-cancel" href="javascript:void(0)" onclick="close_win_select_dd()">取消</a>
 			</div>
 		</div>
 	</div>

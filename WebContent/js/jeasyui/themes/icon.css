@@ -135,6 +135,14 @@
 	background: url('icons/anchor.png') no-repeat;
 }
 
+.icon-refresh {
+	background: url('icons/arrow_refresh.png') no-repeat;
+}
+
+.icon-cross {
+	background: url('icons/cross.png') no-repeat;
+}
+
 /** 新增样式 */
 .SearchArea {
 	padding: 5px 0px 5px 20px;

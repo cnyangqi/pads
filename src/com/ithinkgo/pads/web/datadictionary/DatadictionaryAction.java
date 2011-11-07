@@ -30,6 +30,7 @@ public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 	// - 页面属性 -//
 	private Long id;
 	private String ids;
+	private String query;
 	private int page;// jeasyui datagrid
 	private int rows;// jeasyui datagrid
 	private DataDictionary dataDictionary;
@@ -57,7 +58,7 @@ public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 	@Override
 	public String list() throws Exception {
 		// 将主表对象主键作为字表对象的分页查询条件（Long typeId）
-		AjaxResponse.ajaxResp(dataDictionaryManager.queryDataDictionaryGridView(id, page, rows));
+		AjaxResponse.ajaxResp(dataDictionaryManager.queryDataDictionaryGridView(id, query, page, rows));
 		return null;
 	}
 
@@ -87,6 +88,13 @@ public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 		return null;
 	}
 
+	/** 切换数据字典状态 */
+	public String toggleDataDictionaryStatus() throws Exception {
+		dataDictionaryManager.toggleDatadictionaryStatus(id);
+		AjaxResponse.ajaxResp(true);
+		return null;
+	}
+
 	@Autowired
 	public void setDataDictionaryManager(DataDictionaryManager dataDictionaryManager) {
 		this.dataDictionaryManager = dataDictionaryManager;
@@ -102,6 +110,14 @@ public class DatadictionaryAction extends CrudActionSupport<DataDictionary> {
 
 	public void setIds(String ids) {
 		this.ids = ids;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
 	}
 
 	public int getPage() {

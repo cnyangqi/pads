@@ -6,6 +6,8 @@ package com.ithinkgo.pads.dao.datadictionary;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springside.modules.orm.Page;
 import org.springside.modules.orm.PropertyFilter;
 import org.springside.modules.orm.hibernate.HibernateDao;
+import org.springside.modules.utils.encode.JsonBinder;
 
 import com.ithinkgo.pads.entity.datadictionary.DataDictionary;
 
@@ -39,10 +42,20 @@ public class DataDictionaryDao extends HibernateDao<DataDictionary, Long> {
 	}
 
 	// 将主表对象主键作为字表对象的分页查询条件（Long typeId）
-	public Page<DataDictionary> queryDataDictionaryGridView(Long typeId, Page<DataDictionary> page) {
+	@SuppressWarnings("unchecked")
+	public Page<DataDictionary> queryDataDictionaryGridView(Long typeId, String query, Page<DataDictionary> page) {
 		List<PropertyFilter> filters = new LinkedList<PropertyFilter>();
 		if (typeId != null) {
 			filters.add(new PropertyFilter("EQL_typeId", String.valueOf(typeId)));
+		}
+		if (query != null) {
+			JsonBinder binder = JsonBinder.buildNonNullBinder();
+			Map<String, String> map = binder.fromJson(query, Map.class);
+			for (Entry<String, String> tmp : map.entrySet()) {
+				if (tmp.getValue().length() > 0) {
+					filters.add(new PropertyFilter(tmp.getKey(), tmp.getValue()));
+				}
+			}
 		}
 		return this.findPage(page, filters);
 	}

@@ -39,6 +39,9 @@ public class DataDictionaryManager {
 
 	/** 保存新增或修改的对象 */
 	public void saveDataDictionary(DataDictionary dataDictionary) {
+		if (dataDictionary.getId() == null) {
+			dataDictionary.setStatus("1");// 新增数据字典的时候默认启用数据字典
+		}
 		dataDictionaryDao.save(dataDictionary);
 	}
 
@@ -111,19 +114,30 @@ public class DataDictionaryManager {
 		return list;
 	}
 
-	/** 查询对象列表视图 */
+	/** 查询对象列表视图  */
 	@Transactional(readOnly = true)
-	public Map<String, Object> queryDataDictionaryGridView(Long typeId, int pageNo, int pageSize) {
+	public Map<String, Object> queryDataDictionaryGridView(Long typeId, String query, int pageNo, int pageSize) {
 
 		Page<DataDictionary> page = new Page<DataDictionary>(pageSize);
 		page.setPageNo(pageNo);
-		page = dataDictionaryDao.queryDataDictionaryGridView(typeId, page);
+		page = dataDictionaryDao.queryDataDictionaryGridView(typeId, query, page);
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("total", page.getTotalCount());
 		map.put("rows", page.getResult());
 
 		return map;
+	}
+
+	/** 切换数据字典状态 */
+	public void toggleDatadictionaryStatus(Long id) {
+		DataDictionary dataDictionary = dataDictionaryDao.get(id);
+		if (dataDictionary.getStatus().equalsIgnoreCase("1")) {
+			dataDictionary.setStatus("0");
+		} else {
+			dataDictionary.setStatus("1");
+		}
+		dataDictionaryDao.save(dataDictionary);
 	}
 
 	/** 注入dao对象 */
