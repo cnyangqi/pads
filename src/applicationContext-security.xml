@@ -19,6 +19,8 @@
 		<s:intercept-url pattern="/account/role!save*" access="hasAnyRole('ROLE_修改角色')" />
 		<s:intercept-url pattern="/account/role!delete*" access="hasAnyRole('ROLE_修改角色')" />
 		<s:intercept-url pattern="/account/role*" access="hasAnyRole('ROLE_浏览角色')" />
+		
+		<s:intercept-url pattern="/portal/portal*" access="hasAnyRole('ROLE_浏览门户')" />
 
 		<s:form-login login-page="/login.action" default-target-url="/" authentication-failure-url="/login.action?error=true" />
 		<s:logout logout-success-url="/" />

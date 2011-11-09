@@ -5,9 +5,9 @@ var queryDataDictionaryTypeByIdUrl = '/datadictionary/datadictionarytype!input.a
 
 var queryDataDictionaryTreeViewUrl = '/datadictionary/datadictionary.action';// 查询数据字典视图地址
 var saveDataDictionaryUrl = '/datadictionary/datadictionary!save.action';// 保存数据字典地址
-var batchDeleteDataDictionaryTpyeUrl = '/datadictionary/datadictionary!batchDelete.action';// 批量删除数据字典类型地址
-var deleteDataDictionaryTpyeUrl = '/datadictionary/datadictionary!delete.action';// 批量删除数据字典类型地址
-var toggleDataDictionaryTpyeUrl = '/datadictionary/datadictionary!toggleDataDictionaryStatus.action';// 切换数据字典状态地址
+var batchDeleteDataDictionaryUrl = '/datadictionary/datadictionary!batchDelete.action';// 批量删除数据字典类型地址
+var deleteDataDictionaryUrl = '/datadictionary/datadictionary!delete.action';// 批量删除数据字典类型地址
+var toggleDataDictionaryUrl = '/datadictionary/datadictionary!toggleDataDictionaryStatus.action';// 切换数据字典状态地址
 var queryDataDictionaryByIdUrl = '/datadictionary/datadictionary!input.action';// 通过数据字典主键查询数据字典地址
 
 var selected_node;// 操作节点
@@ -93,7 +93,7 @@ function batch_delete_dd() {
 			type : 'post',
 			dataType : 'json',
 			timeout : 10000,
-			url : ctx + batchDeleteDataDictionaryTpyeUrl,
+			url : ctx + batchDeleteDataDictionaryUrl,
 			data : {
 				ids : tmp.join(',')
 			},
@@ -115,7 +115,7 @@ function del_dd(id) {
 			type : 'post',
 			dataType : 'json',
 			timeout : 10000,
-			url : ctx + deleteDataDictionaryTpyeUrl,
+			url : ctx + deleteDataDictionaryUrl,
 			data : {
 				id : id
 			},
@@ -135,7 +135,7 @@ function stop_dd(id) {
 			type : 'post',
 			dataType : 'json',
 			timeout : 10000,
-			url : ctx + toggleDataDictionaryTpyeUrl,
+			url : ctx + toggleDataDictionaryUrl,
 			data : {
 				id : id
 			},
@@ -155,7 +155,7 @@ function open_dd(id) {
 			type : 'post',
 			dataType : 'json',
 			timeout : 10000,
-			url : ctx + toggleDataDictionaryTpyeUrl,
+			url : ctx + toggleDataDictionaryUrl,
 			data : {
 				id : id
 			},
@@ -607,3 +607,5 @@ $(function() {
 // 1.增加功能完善，支持验证，并能够自动记忆用户操作前状态（如操作节点），执行完毕（数据库同步完毕）自动恢复到之前操作节点，方便用户连续操作。2011.11.2
 // 2.删除功能完善，根据操作结果，自动切换操作节点，方便用户连续操作。2011.11.2
 // 3.修改功能完成，暂不支持修改父级类型。修改父级类型可以通过把所有数据字典类型除自身外做个选择下拉框。2011.11.3
+// 
+// 1.新增数据字典类型的时候，点击数据字典类型树后就无法新增根节点了。2011.11.8
