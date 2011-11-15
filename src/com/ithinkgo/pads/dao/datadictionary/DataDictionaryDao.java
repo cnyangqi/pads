@@ -41,7 +41,7 @@ public class DataDictionaryDao extends HibernateDao<DataDictionary, Long> {
 		return criteria.list();
 	}
 
-	// 将主表对象主键作为字表对象的分页查询条件（Long typeId）
+	/** 将主表对象主键作为字表对象的分页查询条件（Long typeId）*/
 	@SuppressWarnings("unchecked")
 	public Page<DataDictionary> queryDataDictionaryGridView(Long typeId, String query, Page<DataDictionary> page) {
 		List<PropertyFilter> filters = new LinkedList<PropertyFilter>();
